@@ -1,9 +1,17 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { LogOut, UserCircle } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 export default function DashboardLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   // Exact menu items from your image
   const navItems = [
@@ -55,9 +63,13 @@ export default function DashboardLayout() {
             <div className="flex items-center gap-4 pl-6 border-l border-slate-800 ml-4">
                <div className="flex items-center gap-2 text-sm text-slate-400">
                   <UserCircle size={18} />
-                  <span className="hidden sm:block">Mitchell Admin</span>
+                  <span className="hidden sm:block">{currentUser?.name || 'Guest'}</span>
                </div>
-               <button className="text-slate-500 hover:text-red-400 transition-colors">
+               <button 
+                 onClick={handleLogout}
+                 className="text-slate-500 hover:text-red-400 transition-colors"
+                 title="Logout"
+               >
                  <LogOut size={18} />
                </button>
             </div>

@@ -1,26 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Save, Wrench, User, Building2, QrCode } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const EquipmentForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getEquipment } = useData();
 
-  // Mock State
-  const [equipment, setEquipment] = useState({
-    name: "Samsung Monitor 15\"",
+  // Default empty equipment
+  const emptyEquipment = {
+    name: "",
     category: "Monitors",
-    serial: "MT/125/22778837",
-    model: "S-15-LED-2024",
-    employee: "Tejas Modi",
-    department: "Admin",
-    technician: "Mitchell Admin",
-    warranty: "2026-12-31",
-    cost: 150.00,
+    serial: "",
+    model: "",
+    employee: "",
+    department: "",
+    technician: "",
+    warranty: "",
+    cost: 0,
     company: "My Company (San Francisco)",
-    description: "Standard office monitor provided to admin staff.",
-    maintenanceCount: 3 // For the Smart Button
-  });
+    description: "",
+    maintenanceCount: 0
+  };
+
+  const [equipment, setEquipment] = useState(emptyEquipment);
+
+  useEffect(() => {
+    if (id && id !== 'new') {
+      const equipmentId = parseInt(id, 10);
+      const existingEquipment = getEquipment(equipmentId);
+      if (existingEquipment) {
+        setEquipment({
+          name: existingEquipment.name,
+          category: existingEquipment.category,
+          serial: existingEquipment.serial,
+          model: "",
+          employee: existingEquipment.employee,
+          department: existingEquipment.department,
+          technician: "",
+          warranty: "",
+          cost: 0,
+          company: "My Company (San Francisco)",
+          description: "",
+          maintenanceCount: 0
+        });
+      }
+    } else {
+      setEquipment(emptyEquipment);
+    }
+  }, [id, getEquipment]);
 
   return (
     <div className="min-h-screen bg-black text-slate-100 p-8 font-sans">

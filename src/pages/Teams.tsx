@@ -1,31 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Filter, Users } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const Teams = () => {
   const navigate = useNavigate();
-
-  // Mock Data matching your image
-  const teams = [
-    { 
-      id: 1, 
-      name: "Internal Maintenance", 
-      members: ["Anas Makari", "Mitchell Admin"], 
-      company: "My Company (San Francisco)" 
-    },
-    { 
-      id: 2, 
-      name: "Metrology", 
-      members: ["Marc Demo"], 
-      company: "My Company (San Francisco)" 
-    },
-    { 
-      id: 3, 
-      name: "Subcontractor", 
-      members: ["Maggie Davidson"], 
-      company: "My Company (San Francisco)" 
-    },
-  ];
+  const { teams } = useData();
 
   return (
     <div className="min-h-screen bg-black text-slate-100 p-8 font-sans">

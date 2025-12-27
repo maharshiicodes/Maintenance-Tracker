@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Filter, Plus } from 'lucide-react';
 
 const MaintenanceCalendar = () => {
+  const navigate = useNavigate();
   const [view, setView] = useState('Week'); // Day, Week, Month
 
   // Mock Days for "Week 51"
@@ -53,7 +55,10 @@ const MaintenanceCalendar = () => {
                 </button>
               ))}
            </div>
-           <button className="p-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-[0_0_10px_rgba(8,145,178,0.4)]">
+           <button 
+             onClick={() => navigate('/maintenance/new')}
+             className="p-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-[0_0_10px_rgba(8,145,178,0.4)]"
+           >
              <Plus size={20} />
            </button>
         </div>

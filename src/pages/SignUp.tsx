@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Signup = () => {
   const navigate = useNavigate();
+  const { signup } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,18 +43,16 @@ const Signup = () => {
       return;
     }
 
-    // SIMULATED DB CHECK
-    setTimeout(() => {
-      // Mock Duplicate Check
-      if (formData.email === "existing@user.com") {
-        setError("Email Id should not be a duplicate in database");
-        setLoading(false);
-      } else {
-        console.log("Creating portal user:", formData);
-        // Notes: "Land to SignUp page and only portal user create" -> Redirect to Login after success
-        navigate('/login');
-      }
-    }, 1000);
+    // Create portal user in the system
+    const result = await signup(formData.name, formData.email, formData.password);
+    
+    if (result.success) {
+      // Notes: "Land to SignUp page and only portal user create" -> Redirect to Login after success
+      navigate('/login');
+    } else {
+      setError(result.error || 'Signup failed');
+      setLoading(false);
+    }
   };
 
   return (

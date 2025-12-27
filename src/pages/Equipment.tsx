@@ -1,43 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Filter, Settings } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const Equipment = () => {
   const navigate = useNavigate();
-
-  // Mock Data matching your image
-  const equipmentList = [
-    { 
-      id: 1, 
-      name: "Samsung Monitor 15\"", 
-      employee: "Tejas Modi", 
-      department: "Admin", 
-      serial: "MT/125/22778837", 
-      technician: "Mitchell Admin", 
-      category: "Monitors", 
-      company: "My Company (San Francisco)" 
-    },
-    { 
-      id: 2, 
-      name: "Acer Laptop", 
-      employee: "Bhaumik P", 
-      department: "Technician", 
-      serial: "MT/122/11112222", 
-      technician: "Marc Demo", 
-      category: "Computers", 
-      company: "My Company (San Francisco)" 
-    },
-    { 
-      id: 3, 
-      name: "HP Printer LaserJet", 
-      employee: "Sarah Smith", 
-      department: "Sales", 
-      serial: "HP/999/888777", 
-      technician: "Mitchell Admin", 
-      category: "Printers", 
-      company: "My Company (San Francisco)" 
-    },
-  ];
+  const { equipments } = useData();
 
   return (
     <div className="min-h-screen bg-black text-slate-100 p-8 font-sans">
@@ -85,13 +53,11 @@ const Equipment = () => {
                 <th className="p-4">Employee</th>
                 <th className="p-4">Department</th>
                 <th className="p-4">Serial Number</th>
-                <th className="p-4">Technician</th>
                 <th className="p-4">Equipment Category</th>
-                <th className="p-4">Company</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
-              {equipmentList.map((item) => (
+              {equipments.map((item) => (
                 <tr 
                   key={item.id} 
                   onClick={() => navigate(`/equipment/${item.id}`)} // CLICK TO OPEN FORM
@@ -101,13 +67,11 @@ const Equipment = () => {
                   <td className="p-4 text-slate-300">{item.employee}</td>
                   <td className="p-4 text-slate-300">{item.department}</td>
                   <td className="p-4 text-slate-400 font-mono">{item.serial}</td>
-                  <td className="p-4 text-slate-300">{item.technician}</td>
                   <td className="p-4">
                     <span className="px-2 py-1 rounded bg-slate-800 border border-slate-700 text-xs text-slate-300">
                       {item.category}
                     </span>
                   </td>
-                  <td className="p-4 text-slate-400">{item.company}</td>
                 </tr>
               ))}
             </tbody>

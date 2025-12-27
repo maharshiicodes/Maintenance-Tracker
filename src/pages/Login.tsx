@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -15,26 +17,14 @@ const Login = () => {
     setError(null);
     setLoading(true);
 
-    // SIMULATED AUTH LOGIC (Replace with actual backend later)
-    setTimeout(() => {
-      // Logic from your notes: "If email not found then throw error 'Account not exist'"
-      if (formData.email !== "admin@gearguard.com") {
-        setError("Account not exist"); 
-        setLoading(false);
-        return;
-      }
-
-      // Logic from your notes: "Password does not match throw an error msg 'Invalid Password'"
-      if (formData.password !== "Admin@123") {
-        setError("Invalid Password");
-        setLoading(false);
-        return;
-      }
-
-      // Success
-      console.log('Success login');
+    const result = await login(formData.email, formData.password);
+    
+    if (result.success) {
       navigate('/'); // Go to Dashboard
-    }, 1000);
+    } else {
+      setError(result.error || 'Login failed');
+      setLoading(false);
+    }
   };
 
   return (

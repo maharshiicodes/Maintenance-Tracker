@@ -1,21 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Building, Users, Trash2, Plus, Save } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const TeamForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { getTeam } = useData();
 
-  // Mock Data based on "Internal Maintenance"
-  const [team, setTeam] = useState({
-    name: "Internal Maintenance",
+  // Default empty team
+  const emptyTeam = {
+    name: "",
     company: "My Company (San Francisco)",
-    members: [
-      { id: 1, name: "Anas Makari", role: "Technician" },
-      { id: 2, name: "Mitchell Admin", role: "Manager" },
-      { id: 3, name: "Aka Foster", role: "Technician" }
-    ]
-  });
+    members: []
+  };
+
+  const [team, setTeam] = useState(emptyTeam);
+
+  useEffect(() => {
+    if (id && id !== 'new') {
+      const teamId = parseInt(id, 10);
+      const existingTeam = getTeam(teamId);
+      if (existingTeam) {
+        setTeam({
+          name: existingTeam.name,
+          company: existingTeam.company,
+          members: existingTeam.members.map((member, idx) => ({
+            id: idx + 1,
+            name: member,
+            role: "Technician"
+          }))
+        });
+      }
+    } else {
+      setTeam(emptyTeam);
+    }
+  }, [id, getTeam]);
 
   const addMember = () => {
     const newMember = { id: Date.now(), name: "New Member", role: "Technician" };
